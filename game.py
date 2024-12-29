@@ -18,6 +18,8 @@ class Game:
         # Initialize the pygame engine
         pygame.init()
 
+        pygame.mixer.init()
+
         # Setup the size of the screen
         self.screen = pygame.display.set_mode(DEFAULT_WINDOW_SIZE)
 

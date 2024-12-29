@@ -1,5 +1,7 @@
 import pygame
 import random
+import os 
+
 from utils import Colors, DEFAULT_BOARD_ROWS, DEFAULT_BOARD_COLS, DEFAULT_WINDOW_SIZE
 
 class Board: 
@@ -14,6 +16,8 @@ class Board:
         self.col_margin = int((DEFAULT_WINDOW_SIZE[1] - DEFAULT_BOARD_COLS * self.width) / (self.cols + 1))
         self.screen = screen
         self.turn = random.choice([-1, 1])
+        self.click_sound = pygame.mixer.Sound(os.path.abspath("./sounds/click_sound.wav"))
+        self.winner_sound = pygame.mixer.Sound(os.path.abspath("./sounds/winner.wav"))
     
     def create(self):
 
@@ -31,6 +35,10 @@ class Board:
 
     def mark_square(self, row, col):
         self.grid[row][col] = self.turn
+
+        # Play click sound
+        pygame.mixer.Sound.play(self.click_sound)
+        pygame.mixer.music.stop()
 
         self.draw_board()
 
@@ -55,19 +63,35 @@ class Board:
         for col in range(self.cols):
             if all(self.grid[row][col] == self.turn for row in range(self.rows)):
                 self.draw_vertical_winning_line(col)
+                # Play winner sound
+                pygame.mixer.music.stop()
+                pygame.mixer.Sound.play(self.winner_sound)
+                pygame.mixer.music.stop()
                 return True
 
         for row in range(self.rows):
             if all(self.grid[row][col] == self.turn for col in range(self.cols)):
                 self.draw_horizontal_winning_line(row)
+                # Play winner sound
+                pygame.mixer.music.stop()
+                pygame.mixer.Sound.play(self.winner_sound)
+                pygame.mixer.music.stop()
                 return True
 
         if all(self.grid[i][i] == self.turn for i in range(min(self.rows, self.cols))):
             self.draw_asc_diagonal()
+            # Play winner sound
+            pygame.mixer.music.stop()
+            pygame.mixer.Sound.play(self.winner_sound)
+            pygame.mixer.music.stop()
             return True
 
         if all(self.grid[self.rows - 1 - i][i] == self.turn for i in range(min(self.rows, self.cols))):
             self.draw_desc_diagonal()
+            # Play winner sound
+            pygame.mixer.music.stop()
+            pygame.mixer.Sound.play(self.winner_sound)
+            pygame.mixer.music.stop()
             return True
 
         return False
