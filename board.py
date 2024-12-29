@@ -31,8 +31,10 @@ class Board:
                 self.grid[row].append(0)
 
     def is_square_available(self, row, col):
-        return self.grid[row][col] == 0
-
+        if 0 <= row < self.rows and 0 <= col < self.cols:
+            return self.grid[row][col] == 0
+        return False
+    
     def mark_square(self, row, col):
         self.grid[row][col] = self.turn
 
@@ -43,6 +45,8 @@ class Board:
         self.draw_board()
 
     def restart(self):
+        pygame.mixer.music.stop()
+
         self.screen.fill(Colors.DARK_GREEN.value)
 
         self.turn = random.choice([-1, 1])
